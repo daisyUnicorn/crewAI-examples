@@ -1,0 +1,20 @@
+[project]
+name = "agentbay-crewai-integration"
+version = "0.1.0"
+description = "CrewAI tool integration for wuying-agentbay-sdk"
+authors = [{name = "AgentBay Integrations", email = "dev@example.com"}]
+requires-python = ">=3.10,<3.12"
+dependencies = [
+  "crewai>=0.152.0",
+  "python-dotenv>=1.0.0",
+  "pydantic>=2.6",
+  "wuying-agentbay-sdk>=0.1.0; python_version >= '3.10'",
+]
+
+[tool.pyright]
+useLibraryCodeForTypes = true
+exclude = [".cache"]
+
+[tool.ruff]
+select = ['E', 'W', 'F', 'I', 'B', 'C4', 'ARG', 'SIM']
+ignore = ['W291', 'W292', 'W293']
