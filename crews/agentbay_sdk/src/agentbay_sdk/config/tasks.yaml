@@ -1,0 +1,14 @@
+run_code_task:
+  description: >
+    """
+    在云端 AgentBay 会话中运行一段 {language} 代码并返回输出。
+    你将仅返回执行结果文本，不要附加解释。
+
+    代码：
+    ----------
+    {code}
+    """
+  expected_output: >
+    """
+    纯文本执行结果（stdout），若异常则返回错误信息。
+    """
