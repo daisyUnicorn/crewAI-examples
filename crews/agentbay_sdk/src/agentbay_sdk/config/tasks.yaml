@@ -1,0 +1,15 @@
+run_code_task:
+  description: >
+    """
+    Run a {language} code snippet in cloud AgentBay session and return the output.
+    You should only return the execution result text without additional explanations.
+
+    Code:
+    ----------
+    {code}
+    """
+  expected_output: >
+    """
+    Plain text execution result (stdout), or error message if an exception occurred.
+    """
+
