@@ -17,13 +17,22 @@ python diagnose.py
 **Error Message**:
 ```
 litellm.InternalServerError: OpenAIException - Connection error
+AgentBayConnectionError: 无法连接到模型提供者。已重试 3 次。这可能是临时性问题 - 请稍后再试。
 ```
+
+**自动重试机制**:
+代码现在包含自动重试机制，当检测到连接错误时会：
+- 自动重试最多 3 次（可通过 `max_retries` 参数配置）
+- 使用指数退避策略（延迟时间递增）
+- 显示重试进度和等待时间
+- 如果所有重试都失败，抛出 `AgentBayConnectionError` 异常
 
 **Possible Causes**:
 - Network connectivity issues
 - Incorrect API endpoint URL
 - Firewall/proxy blocking the connection
 - Invalid API key
+- Temporary service unavailability
 
 **Solutions**:
 
@@ -252,7 +261,18 @@ python3 --version
    - Model name has `openai/` prefix
    - API key starts with `sk-`
 
-6. **Try OpenAI first** (to isolate the issue):
+6. **自定义重试配置** (如果默认重试不够):
+   ```python
+   from agentbay_sdk.api.wuying_agentbay_wrapper import AgentBayCodeExecutor
+   
+   # 增加重试次数和延迟
+   executor = AgentBayCodeExecutor(
+       max_retries=5,      # 默认 3 次
+       retry_delay=2.0     # 默认 1.0 秒
+   )
+   ```
+
+7. **Try OpenAI first** (to isolate the issue):
    ```bash
    # Temporarily use OpenAI
    OPENAI_API_KEY=your_openai_key

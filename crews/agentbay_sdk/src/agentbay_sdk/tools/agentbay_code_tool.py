@@ -2,7 +2,7 @@ from typing import Optional, Dict, Type
 from crewai.tools import BaseTool
 from pydantic import Field
 from .tool_schema import AgentBayRunCodeInput
-from ..api.wuying_agentbay_wrapper import AgentBayCodeExecutor
+from ..api.wuying_agentbay_wrapper import AgentBayCodeExecutor, AgentBayConnectionError
 
 
 _executor: Optional[AgentBayCodeExecutor] = None
@@ -31,14 +31,22 @@ class AgentBayRunCodeTool(BaseTool):
         timeout_s: int = 60,
         labels: Optional[Dict[str, str]] = None,
     ) -> str:
-        """Execute code in AgentBay cloud session."""
+        """Execute code in AgentBay cloud session.
+        
+        Raises:
+            AgentBayConnectionError: If connection to model provider fails after retries
+        """
         executor = _get_executor()
-        return executor.run_code(
-            code=code,
-            language=language,
-            timeout_s=timeout_s,
-            labels=labels,
-        )
+        try:
+            return executor.run_code(
+                code=code,
+                language=language,
+                timeout_s=timeout_s,
+                labels=labels,
+            )
+        except AgentBayConnectionError:
+            # 重新抛出连接错误，保持错误信息
+            raise
 
 
 # Create a singleton instance
